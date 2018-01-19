@@ -1,4 +1,9 @@
-import qualified Haskoin.Cli.New as New
+module Main
+    (
+      main
+    ) where
+
+import qualified Haskoin.Cli.New as N
 
 main :: IO ()
-main = New.main
+main = N.main

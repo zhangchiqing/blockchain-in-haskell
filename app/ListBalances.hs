@@ -1,5 +1,10 @@
-import qualified Haskoin.Cli.ListBalances as ListBalances
+module Main
+    (
+      main
+    ) where
+
+import qualified Haskoin.Cli.ListBalances as L
 
 main :: IO ()
-main = ListBalances.main
+main = L.main
 

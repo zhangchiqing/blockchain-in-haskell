@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 59d680c0c5e205b53c43cfca0f24a13481c58b6789e885a2bf633a0b8ad48843
+-- hash: 99a8ec3d77a8858ebaee2052d0ae32e0afcdf54fc66485699ff2874890ee3bff
 
 name:           blockchain-in-haskell
 version:        0.1.0.0
@@ -37,6 +37,7 @@ library
     , containers
     , cryptonite
     , directory
+    , hspec
     , lens
     , memory
     , protolude
@@ -60,6 +61,7 @@ executable blockchain-in-haskell-list-balances
   ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
+    , blockchain-in-haskell
     , base16-bytestring
     , binary
     , blockchain-in-haskell
@@ -67,6 +69,7 @@ executable blockchain-in-haskell-list-balances
     , containers
     , cryptonite
     , directory
+    , hspec
     , lens
     , memory
     , protolude
@@ -93,6 +96,7 @@ test-suite blockchain-in-haskell-test
     , containers
     , cryptonite
     , directory
+    , hspec
     , lens
     , memory
     , protolude

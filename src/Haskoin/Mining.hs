@@ -10,21 +10,26 @@ import qualified Data.Map as M
 
 type TransactionPool = IO [Transaction]
 
+-- Number of unit coin as mining reword
 blockReward :: Integer
 blockReward = 1000
 
+-- Limit on the total number of transactions in each block
 globalTransactionLimit :: Int
 globalTransactionLimit = 1000
 
 numBlocksToCalculateDifficulty :: Int
 numBlocksToCalculateDifficulty = 100
 
+-- a 46 bit number
 genesisBlockDifficulty :: (Fractional a) => a
 genesisBlockDifficulty = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
 
+-- Target to produce each block in about 10 seconds
 targetTime :: (Fractional a) => a
 targetTime = 10
 
+-- Given a list of pending transactions, take
 mineOn :: TransactionPool -> Account -> Blockchain -> IO Blockchain
 mineOn pendingTransactions minerAccount parent = do
   allpending <- pendingTransactions
@@ -32,8 +37,12 @@ mineOn pendingTransactions minerAccount parent = do
   let ts = take globalTransactionLimit valids
   loop ts 0
   where
+    -- hash(B) <= M / D, where
+    --   M = 2 ^ 160 - 1
+    --   D's range = [1, M]
     validChain :: Blockchain -> Bool
-    validChain bc = difficulty bc < desiredDifficulty parent
+    --validChain bc = difficulty bc < desiredDifficulty parent
+    validChain bc = difficulty bc <= desiredDifficulty parent
 
     loop :: [Transaction] -> Integer -> IO Blockchain
     loop ts nonce = do
@@ -50,6 +59,7 @@ mineOn pendingTransactions minerAccount parent = do
         then return candidate
         else loop ts (nonce + 1)
 
+-- A 160 bit integer, ranges from [0, 2 ^ 160]
 difficulty :: Blockchain -> Integer
 difficulty = os2ip . hash
 
@@ -65,6 +75,7 @@ safeDiv :: (Num a, Eq a, Fractional a) => a -> a -> a
 safeDiv n d = n / (if d == 0 then 1 else d)
 
 -- BEWARE: O(n * k), where k = numBlocksToCalculateDifficulty
+-- M / D
 desiredDifficulty :: Blockchain -> Integer
 desiredDifficulty bc = round $ loop bc
   where
@@ -96,6 +107,7 @@ balances bc =
       minings = map (\h -> (_miner h, blockReward)) $ headers bc
   in M.fromListWith (+) $ debits ++ credits ++ minings
 
+-- Reject wrong accounts and insufficient funds
 validTransactions :: Blockchain -> [Transaction] -> [Transaction]
 validTransactions bc txns =
   let accounts = balances bc

@@ -14,11 +14,13 @@ data Transaction = Transaction {
   _amount :: Integer
   } deriving (Eq, Show)
 
+newtype BlockFF a = BlockFF [a] deriving (Eq, Show, Foldable, Functor, Monoid)
 newtype BlockF a = Block [a] deriving (Eq, Show, Foldable, Functor, Monoid)
 -- newtype BlockF a = Block [a] deriving (Eq, Show, Foldable, Traversable, Functor, Monoid)
 -- Block [Transaction]
 type BlockBody = BlockF Transaction
 
+-- 160 bit hash value
 type HaskoinHash = Digest SHA1
 
 data BlockHeader = BlockHeader {
