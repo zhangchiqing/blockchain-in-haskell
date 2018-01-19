@@ -11,25 +11,28 @@ import Haskoin.Mining (mineOn, makeGenesis)
 import Data.Binary (encodeFile, decodeFile, Binary)
 import Control.Monad (forever)
 
+defaultChainFile :: FilePath
 defaultChainFile = "main.chain"
+
+defaultAccount :: String
 defaultAccount = "10"
 
 main :: IO ()
 main = do
   args <- getArgs
-  let (filename, accountS) = case args of
+  let (fileName, accountS) = case args of
         [] -> (defaultChainFile, defaultAccount)
         [filename] -> (filename, defaultAccount)
         [filename, account] -> (filename, account)
         _ -> error "Usage: mine [filename] [account]"
-      swapFile = filename ++ ".tmp"
+      swapFile = fileName ++ ".tmp"
       txnPool = return []
-      account = Account $ read accountS
+      acc = Account $ read accountS
   forever $ do
-    chain <- loadOrCreate filename makeGenesis :: IO Blockchain
-    newChain <- mineOn txnPool account chain
+    chain <- loadOrCreate fileName makeGenesis :: IO Blockchain
+    newChain <- mineOn txnPool acc chain
     encodeFile swapFile newChain
-    copyFile swapFile filename
+    copyFile swapFile fileName
     print "Block mined and saved!"
 
 loadOrCreate :: Binary a => FilePath -> IO a -> IO a

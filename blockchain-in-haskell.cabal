@@ -62,23 +62,6 @@ executable blockchain-in-haskell-list-balances
   build-depends:
       base >=4.7 && <5
     , blockchain-in-haskell
-    , base16-bytestring
-    , binary
-    , blockchain-in-haskell
-    , bytestring
-    , containers
-    , cryptonite
-    , directory
-    , hspec
-    , lens
-    , memory
-    , protolude
-    , time
-    , vector
-  other-modules:
-      Mine
-      New
-      Paths_blockchain_in_haskell
   default-language: Haskell2010
 
 test-suite blockchain-in-haskell-test

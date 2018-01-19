@@ -12,6 +12,7 @@ import Data.Binary
 import qualified Data.Map as M
 import qualified Data.ByteString.Lazy as BSL
 
+defaultChainFile :: FilePath
 defaultChainFile = "main.chain"
 
 main :: IO ()
